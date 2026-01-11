@@ -41,7 +41,7 @@ class CatalogView(TemplateView):
         'color': lambda queryset, value: queryset.filter(color__iexact=value),
         'min_price': lambda queryset, value: queryset.filter(price_gte=value),
         'max_price': lambda queryset, value: queryset.filter(price_lte=value),
-        'size': lambda queryset, value: queryset.filter(product_size__size__name=value),
+        'size': lambda queryset, value: queryset.filter(product_sizes__size__name=value),
     }
 
     '''
@@ -56,7 +56,7 @@ class CatalogView(TemplateView):
     '''
 
     def get_context_data(self, **kwargs):
-        context = self.get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         category_slug = kwargs.get('category_slug')
         categories = Category.objects.all()
         products = Product.objects.all().order_by('-created_at')
@@ -68,7 +68,7 @@ class CatalogView(TemplateView):
             пытаемся достать категорию по тому слагу, который указан еще в category_slug
                 тобишь по тому слагу, который мы получили от запроса пользователя
             '''
-            products = products.filter(Category=current_category) # наши продукты мы фильтруем по категории, которую указал человек
+            products = products.filter(category=current_category) # наши продукты мы фильтруем по категории, которую указал человек
 
         query = self.request.GET.get('q')
         
@@ -127,7 +127,7 @@ class CatalogView(TemplateView):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
-        if request.headers.get('HX-request'):
+        if request.headers.get('HX-Request'):
             if context.get('show_search'):
                 return TemplateResponse(request, 'main/search_input.html', context)
             elif context.get('reset_search'):
@@ -166,7 +166,7 @@ class ProductDetailView(DetailView):
         self.object = self.get_object()
         context = self.get_context_data(**kwargs)
 
-        if request.headers.get('HX-request'):
+        if request.headers.get('HX-Request'):
             return TemplateResponse(request, 'main/product_detail.html', context)
 
         raise TemplateResponse(request, self.template_name, context)

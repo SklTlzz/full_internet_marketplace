@@ -169,4 +169,4 @@ class ProductDetailView(DetailView):
         if request.headers.get('HX-Request'):
             return TemplateResponse(request, 'main/product_detail.html', context)
 
-        raise TemplateResponse(request, self.template_name, context)
+        return TemplateResponse(request, self.template_name, context)

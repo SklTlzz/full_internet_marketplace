@@ -111,7 +111,7 @@ class CustomUserUpdateForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
 
-        if email and User.objects.filter(email=email).exclude(id=self.instance.id).exists:
+        if email and User.objects.filter(email=email).exclude(id=self.instance.id).exists():
             raise forms.ValidationError('This email is already in use.')
 
         return email

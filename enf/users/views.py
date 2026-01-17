@@ -34,10 +34,10 @@ def login_view(request):
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
             return redirect('main:index')
-        else:
-            form = CustomUserLoginForm()
+    else:
+        form = CustomUserLoginForm()
         
-        return render(request, 'users/login.html', {'form': form})
+    return render(request, 'users/login.html', {'form': form})
 
 
 @login_required(login_url='/users/login')
@@ -55,7 +55,7 @@ def profile_view(request):
     else:
         form = CustomUserUpdateForm(instance=request.user)
 
-    recommended_products = Product.objects.all().orber_by('id')[:3]
+    recommended_products = Product.objects.all().order_by('id')[:3]
 
     return TemplateResponse(request, 'users/profile.html', {
         'form': form,
@@ -94,7 +94,7 @@ def update_account_details(request):
             updated_user = CustomUser.objects.get(id=user.id)
             request.user = updated_user
 
-            if request.header.get('HX-Request'):
+            if request.headers.get('HX-Request'):
                 return TemplateResponse(request, 'users/partials/account_details.html', {'user': updated_user})
 
             return TemplateResponse(request, 'users/partials/account_details.html', {'user': updated_user})

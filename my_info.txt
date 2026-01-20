@@ -1,3 +1,6 @@
-остановился на 4:44:39
+остановился на 6:37:29
 
 https://www.youtube.com/watch?v=ajxM-EaLezc
+
+
+stripe listen --forward-to localhost:8000/payment/stripe/webhook/ - для запуска webhook
